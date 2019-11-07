@@ -1,18 +1,16 @@
-import { LOGIN_ERROR, LOGIN_PENDING, LOGIN_SUCCESS } from '../constants/actionTypes';
+import { LOGIN_FAILURE, LOGIN_SUCCESS } from '../constants/actionTypes';
 export default (state = {
-    LOGIN_ERROR: null,
-    LOGIN_PENDING: false,
-    LOGIN_SUCCESS: false
+    isLogin: false,
+    isLoginFail: false
 }, action) => {
     switch (action.type) {
         case LOGIN_SUCCESS: return {
-
+            ...state,
+            isLogin: true,
         }
-        case LOGIN_PENDING: return {
-
-        }
-        case LOGIN_ERROR: return {
-
+        case LOGIN_FAILURE: return {
+            ...state,
+            isLoginFail: true
         }
         default: return {
             state

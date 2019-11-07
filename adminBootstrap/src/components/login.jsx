@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { login } from "../reducers/loginReducers";
+import userActions from "../actions/userActions";
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -7,16 +10,24 @@ class Login extends Component {
       password: ""
     };
   }
-  handleChangeEmail=(e)=>{
-      this.setState({
-          email:e.target.value
-      })
-  }
-  handleChangePassword=(e)=>{
+  handleChangeEmail = e => {
     this.setState({
-        password:e.target.value
-    })
-}
+      email: e.target.value
+    });
+  };
+  handleChangePassword = e => {
+    this.setState({
+      password: e.target.value
+    });
+  };
+
+  handleSubmit = () => {
+    let data={
+      "email":this.state.email,
+      "password":this.state.password
+    }
+    this.props.login(data);
+  };
   render() {
     return (
       <div className="login-container">
@@ -56,7 +67,13 @@ class Login extends Component {
                     onChange={this.handleChangePassword}
                   />
                 </div>
-                <button type="submit" className="btn btn-primary sunny-morning-gradient">Submit</button>
+                <button
+                  type="submit"
+                  className="btn btn-primary sunny-morning-gradient"
+                  onClick={this.handleSubmit}
+                >
+                  Submit
+                </button>
               </form>
             </div>
           </div>
@@ -65,5 +82,13 @@ class Login extends Component {
     );
   }
 }
-
-export default Login;
+const mapStateToProps = state => {
+  return {};
+};
+const actionCreators = {
+  login: userActions.login
+};
+export default connect(
+  mapStateToProps,
+  actionCreators
+)(Login);
