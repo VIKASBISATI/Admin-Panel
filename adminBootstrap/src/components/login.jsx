@@ -14,19 +14,27 @@ class Login extends Component {
     this.setState({
       email: e.target.value
     });
+    console.log("email",this.state.email);
+    
   };
   handleChangePassword = e => {
     this.setState({
       password: e.target.value
     });
+    console.log("password",this.state.password);
+
   };
 
   handleSubmit = () => {
-    let data={
-      "email":this.state.email,
-      "password":this.state.password
-    }
-    this.props.login(data);
+    let data = {
+      email: this.state.email,
+      password: this.state.password
+    };
+    console.log("data before sending to action ", data);
+    // this.props.history.push('/dashboard')
+    this.props.loginn(data);
+    this.props.history.push('/dashboard')
+
   };
   render() {
     return (
@@ -82,13 +90,14 @@ class Login extends Component {
     );
   }
 }
-const mapStateToProps = state => {
-  return {};
-};
 const actionCreators = {
-  login: userActions.login
+  loginn: userActions.login
 };
+function mapState(state){
+  return {state};
+};
+
 export default connect(
-  mapStateToProps,
+  mapState,
   actionCreators
 )(Login);

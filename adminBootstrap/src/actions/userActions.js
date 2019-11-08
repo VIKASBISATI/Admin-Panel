@@ -1,21 +1,28 @@
 import { adminLogin } from '../services/adminServices';
-import { LOGIN_FAILURE, LOGIN_SUCCESS } from '../constants/actionTypes'
+import { LOGIN_FAILURE, LOGIN_SUCCESS,LOGIN_REQUEST } from '../constants/actionTypes'
 const userActions = {
-    login
-}
-function login(data) {
-    return (dispatch) => {
-        adminLogin(data).then(res => {
-            console.log("res in user actions for login", res);
-            dispatch(success(res));
+
+ login(data) {
+    console.log("dtaakhdkhakfhjkajfkue",data);
+    return function(dispatch){
+        dispatch(request(data));
+        adminLogin(data)
+        .then(data => {
+            console.log(";lgjkjgkvhf",data.data.id); 
+            localStorage.setItem('token',data.data.id)         
+            dispatch(success(data));
+            // this.props.history.push('/dashboard')
+            // window.location.href="/dashboard"
         }).catch(err => {
             dispatch(failure(err.toString()))
         })
     }
-    function success(res) {
+    function request(data) { return { type:LOGIN_REQUEST, data } }
+
+    function success(data) {
         return {
             type: LOGIN_SUCCESS,
-            res
+            data
         }
     }
     function failure(err) {
@@ -24,5 +31,6 @@ function login(data) {
             err
         }
     }
+}
 }
 export default userActions
