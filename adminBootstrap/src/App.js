@@ -4,6 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from './components/login';
 import './App.css';
 import Dashboard from './components/dashboard';
+// import "bootstrap/less/bootstrap.less";
+
 class App extends React.Component {
   render() {
     return (

@@ -4,7 +4,6 @@ export function adminLogin(data) {
     return axios.post(BASE_URL + '/user/adminLogin', data)
 }
 export function getAdminUsersList() {
-    console.log("local storage token",localStorage.getItem('token'));
     return axios.get(BASE_URL + '/user/getAdminUserList', {
     headers: {
         Authorization: localStorage.getItem('token')
@@ -15,7 +14,6 @@ export function getAdminUsersList() {
     })
 }
 export function userService() {
-    console.log("local storage token",localStorage.getItem('token'));
     return axios.get(BASE_URL + '/user/service', {
     headers: {
         Authorization: localStorage.getItem('token')
