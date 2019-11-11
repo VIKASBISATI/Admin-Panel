@@ -3,7 +3,16 @@ import { withRouter } from "react-router-dom";
 import { Navbar, Nav, Card, Table } from "react-bootstrap";
 import { getAdminUsersList, userService } from "../services/adminServices";
 import Pagination from "react-js-pagination";
-
+import { GET_ADMIN_DATA } from "../constants/actionTypes";
+import {connect} from 'react-redux'
+// const dispatchToProps=dispatch=>({
+//   getUsersList:resData=>dispatch({type:GET_ADMIN_DATA,payload:resData})
+// })
+function mapStateToProps(state){
+return {
+  userList:state.dashboardReducers.user
+}
+}
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -20,14 +29,19 @@ class Dashboard extends Component {
     };
   }
 
-  componentDidMount() {
+   async componentDidMount() {
+    
     this.getAdminUser();
     this.pageSet();
+    await console.log("data in did mount ",this.props.userList);
+    
   }
 
   getAdminUser = () => {
     getAdminUsersList()
       .then(res => {
+        let resData=res.data.data.data;
+        // this.props.getUsersList(resData)
         this.setState({
           allUsers: res.data.data.data
         });
@@ -80,7 +94,6 @@ class Dashboard extends Component {
           users: basic
         };
         const tempUserType = [];
-
         tempUserType.push(data1);
         tempUserType.push(data2);
         // console.log("user types are ", this.state.userType);
@@ -115,7 +128,7 @@ class Dashboard extends Component {
     this.props.history.push("/");
   };
   render() {
-    // console.log("this.state.sno", this.state.sno);
+    console.log("this.state.sno", this.props.userList);
     const userMap = this.state.userType.map((data, index) => {
       return (
         <Card
@@ -142,7 +155,9 @@ class Dashboard extends Component {
             <Nav.Link onClick={this.handleLogout}>LOGOUT</Nav.Link>
           </Nav>
         </Navbar>
-        <div className="d-flex align-items-center justify-content-center">{userMap}</div>
+        <div className="d-flex align-items-center justify-content-center">
+          {userMap}
+        </div>
         <Table variant="dark">
           <thead>
             <tr>
@@ -180,4 +195,5 @@ class Dashboard extends Component {
     );
   }
 }
-export default withRouter(Dashboard);
+export default connect(mapStateToProps)(Dashboard)
+// export default withRouter(Dashboard);

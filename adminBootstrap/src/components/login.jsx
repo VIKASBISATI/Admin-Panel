@@ -1,7 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { login } from "../reducers/loginReducers";
 import userActions from "../actions/userActions";
+import { MDBIcon, MDBBtn, MDBCardHeader, MDBInput } from "mdbreact";
+import { Card } from "@material-ui/core";
+import { getAdminUsersList } from "../services/adminServices";
+import { GET_ADMIN_DATA } from "../constants/actionTypes";
+const dispatchToProps=dispatch=>({
+  getUsersList:resData=>dispatch({type:GET_ADMIN_DATA,payload:resData})
+})
+function mapStateToProps(state){
+  return {
+    userList:state.dashboardReducers.user
+  }
+  }
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -10,19 +21,26 @@ class Login extends Component {
       password: ""
     };
   }
+  componentDidMount(){
+    getAdminUsersList().then((data)=>{
+      console.log("data in login ",data.data.data.data);
+      let resData=data.data.data.data;
+      this.props.getUsersList(resData)
+
+      
+    })
+  }
   handleChangeEmail = e => {
     this.setState({
       email: e.target.value
     });
-    console.log("email",this.state.email);
-    
+    // console.log("email", this.state.email, e.target.value);
   };
   handleChangePassword = e => {
     this.setState({
       password: e.target.value
     });
-    console.log("password",this.state.password);
-
+    // console.log("password", this.state.password);
   };
 
   handleSubmit = () => {
@@ -32,60 +50,52 @@ class Login extends Component {
     };
     console.log("data before sending to action ", data);
     // this.props.history.push('/dashboard')
-    this.props.loginn(data);
-    this.props.history.push('/dashboard')
 
+    // this.props.loginn(data);
+   
+    this.props.history.push("/dashboard");
   };
   render() {
     return (
-      <div className="login-container">
-        <div className="d-flex align-items-center justify-content-center">
-          <div className="card" style={{ width: "450px", height: "550px" }}>
-            <div className="d-flex align-items-center justify-content-center">
-              <form>
-                <div className="card-title">
-                  <div className="d-flex align-items-center justify-content-center">
-                    <p className="login-header">
-                      <span style={{ color: "blue" }}>F</span>
-                      <span style={{ color: "red" }}>U</span>
-                      <span style={{ color: "#F4B400" }}>N</span>
-                      <span style={{ color: "blue" }}>D</span>
-                      <span style={{ color: "green" }}>O</span>
-                      <span style={{ color: "red" }}>O</span>
-                    </p>
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label for="email">Email:</label>
-                  <input
-                    type="email"
-                    placeholder="Enter email"
-                    id="email"
-                    className="form-control"
-                    onChange={this.handleChangeEmail}
-                  />
-                </div>
-                <div className="form-group">
-                  <label for="password">Password:</label>
-                  <input
-                    type="password"
-                    placeholder="Enter password..."
-                    id="password"
-                    className="form-control"
-                    onChange={this.handleChangePassword}
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="btn btn-primary sunny-morning-gradient"
-                  onClick={this.handleSubmit}
-                >
-                  Submit
-                </button>
-              </form>
+      <div
+        className="d-flex align-items-center justify-content-center"
+        style={{ height: "100vh", weight: "100vw" }}
+      >
+        <Card className="login-card">
+          <MDBCardHeader className="form-header deep-blue-gradient rounded">
+            <h3 className="my-3">
+              <MDBIcon icon="lock" /> AdminLogin
+            </h3>
+          </MDBCardHeader>
+          <div className="login-content">
+            <MDBInput
+              label="Enter your email"
+              icon="envelope"
+              group
+              type="email"
+              validate
+              onChange={this.handleChangeEmail}
+            />
+            <MDBInput
+              label="Enter your password"
+              icon="lock"
+              group
+              type="password"
+              validate
+              onChange={this.handleChangePassword}
+            />
+            <div className="text-center mt-4">
+              <MDBBtn
+                color="light-blue"
+                className="mb-3"
+                type="submit"
+                onClick={this.handleSubmit}
+              >
+                Login
+              </MDBBtn>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
     );
   }
@@ -93,11 +103,8 @@ class Login extends Component {
 const actionCreators = {
   loginn: userActions.login
 };
-function mapState(state){
-  return {state};
-};
+function mapState(state) {
+  return { state };
+}
 
-export default connect(
-  mapState,
-  actionCreators
-)(Login);
+export default connect(mapStateToProps,dispatchToProps)(Login);

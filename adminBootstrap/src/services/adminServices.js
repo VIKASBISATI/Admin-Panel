@@ -1,7 +1,9 @@
 import axios from 'axios';
 const BASE_URL = "http://fundoonotes.incubation.bridgelabz.com/api";
 export function adminLogin(data) {
-    return axios.post(BASE_URL + '/user/adminLogin', data)
+    return axios.post(BASE_URL + '/user/adminLogin',data).then(res=>{
+        localStorage.setItem('token',res.data.id)
+    })
 }
 export function getAdminUsersList() {
     return axios.get(BASE_URL + '/user/getAdminUserList', {
