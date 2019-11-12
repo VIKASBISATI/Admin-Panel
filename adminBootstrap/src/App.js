@@ -5,7 +5,7 @@ import Login from './components/login';
 import './App.css';
 import Dashboard from './components/dashboard';
 // import "bootstrap/less/bootstrap.less";
-
+import QuestionAnswers from './components/questionAnswers'
 class App extends React.Component {
   render() {
     return (
@@ -13,6 +13,7 @@ class App extends React.Component {
           <Switch>
             <Route path="/" exact component={Login} />
             <Route path="/dashboard" component={Dashboard}></Route>
+            <Route path="/QAList" component={QuestionAnswers}></Route>
           </Switch>
         </Router>
     );

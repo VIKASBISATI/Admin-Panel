@@ -4,14 +4,15 @@ import { Navbar, Nav, Card, Table } from "react-bootstrap";
 import { getAdminUsersList, userService } from "../services/adminServices";
 import Pagination from "react-js-pagination";
 import { GET_ADMIN_DATA } from "../constants/actionTypes";
-import {connect} from 'react-redux'
+import { connect } from "react-redux";
 // const dispatchToProps=dispatch=>({
 //   getUsersList:resData=>dispatch({type:GET_ADMIN_DATA,payload:resData})
 // })
-function mapStateToProps(state){
-return {
-  userList:state.dashboardReducers.user
-}
+function mapStateToProps(state) {
+  console.log("in map state to props", state);
+  return {
+    userList: state.dashboardReducers.user
+  };
 }
 class Dashboard extends Component {
   constructor(props) {
@@ -29,40 +30,36 @@ class Dashboard extends Component {
     };
   }
 
-   async componentDidMount() {
-    
-    this.getAdminUser();
+  async componentDidMount() {
+    this.getAdminUser(this.props.userList);
     this.pageSet();
-    await console.log("data in did mount ",this.props.userList);
-    
+    await console.log("data in did mount ", this.props.userList);
   }
 
-  getAdminUser = () => {
-    getAdminUsersList()
-      .then(res => {
-        let resData=res.data.data.data;
-        // this.props.getUsersList(resData)
-        this.setState({
-          allUsers: res.data.data.data
-        });
-        console.log("all users data", this.state.allUsers);
-        const totalUsers = res.data.data.data.length;
-        const type = res.data.data.data.filter(data => {
-          return data.service === "advance";
-        });
-        this.setState({
-          advance: type.length
-        });
-        const n = totalUsers - this.state.advance;
-        this.setState({
-          basic: n
-        });
-        this.getService(this.state.basic, this.state.advance);
-        this.pageSet(this.state.allUsers);
-      })
-      .catch(err => {
-        console.log("Err in getAdmin users list ", err);
-      });
+  getAdminUser = async usersData => {
+    // let resData=res.data.data.data;
+    // this.props.getUsersList(resData)
+    console.log("users data", usersData);
+
+    console.log("users list", this.props.userList);
+
+    await this.setState({
+      allUsers: usersData
+    });
+    console.log("all users data", this.state.allUsers);
+    const totalUsers = this.props.userList.length;
+    const type = this.props.userList.filter(data => {
+      return data.service === "advance";
+    });
+    this.setState({
+      advance: type.length
+    });
+    const n = totalUsers - this.state.advance;
+    this.setState({
+      basic: n
+    });
+    this.getService(this.state.basic, this.state.advance);
+    this.pageSet(this.state.allUsers);
   };
 
   pageSet = async completeData => {
@@ -124,11 +121,20 @@ class Dashboard extends Component {
     });
   };
 
+  // handleUsersLink=()=>{
+  //   this.props.history.push("/dashboard")
+  // }
+
   handleLogout = () => {
     this.props.history.push("/");
   };
+
+  handleQA = () => {
+    this.props.history.push("/QAList");
+  };
+
   render() {
-    console.log("this.state.sno", this.props.userList);
+    // console.log("this.state.sno", this.props.userList);
     const userMap = this.state.userType.map((data, index) => {
       return (
         <Card
@@ -149,8 +155,8 @@ class Dashboard extends Component {
         <Navbar bg="light">
           <Navbar.Brand>ADMIN DASHBOARD</Navbar.Brand>
           <Nav>
-            <Nav.Link>USERS</Nav.Link>
-            <Nav.Link>Q & A</Nav.Link>
+            {/* <Nav.Link onClick={this.handleUsersLink}>USERS</Nav.Link> */}
+            <Nav.Link onClick={this.handleQA}>Q & A</Nav.Link>
             <Nav.Link>PAYMENT</Nav.Link>
             <Nav.Link onClick={this.handleLogout}>LOGOUT</Nav.Link>
           </Nav>
@@ -158,7 +164,7 @@ class Dashboard extends Component {
         <div className="d-flex align-items-center justify-content-center">
           {userMap}
         </div>
-        <Table variant="dark">
+        <Table variant="dark" responsive>
           <thead>
             <tr>
               <th>S.NO</th>
@@ -195,5 +201,5 @@ class Dashboard extends Component {
     );
   }
 }
-export default connect(mapStateToProps)(Dashboard)
+export default connect(mapStateToProps)(Dashboard);
 // export default withRouter(Dashboard);

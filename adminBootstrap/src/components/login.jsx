@@ -5,14 +5,14 @@ import { MDBIcon, MDBBtn, MDBCardHeader, MDBInput } from "mdbreact";
 import { Card } from "@material-ui/core";
 import { getAdminUsersList } from "../services/adminServices";
 import { GET_ADMIN_DATA } from "../constants/actionTypes";
-const dispatchToProps=dispatch=>({
-  getUsersList:resData=>dispatch({type:GET_ADMIN_DATA,payload:resData})
-})
-function mapStateToProps(state){
+const dispatchToProps = dispatch => ({
+  getUsersList: resData => dispatch({ type: GET_ADMIN_DATA, payload: resData })
+});
+function mapStateToProps(state) {
   return {
-    userList:state.dashboardReducers.user
-  }
-  }
+    userList: state.dashboardReducers.user
+  };
+}
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -21,14 +21,12 @@ class Login extends Component {
       password: ""
     };
   }
-  componentDidMount(){
-    getAdminUsersList().then((data)=>{
-      console.log("data in login ",data.data.data.data);
-      let resData=data.data.data.data;
-      this.props.getUsersList(resData)
-
-      
-    })
+  componentDidMount() {
+    getAdminUsersList().then(data => {
+      console.log("data in login ", data.data.data.data);
+      let resData = data.data.data.data;
+      this.props.getUsersList(resData);
+    });
   }
   handleChangeEmail = e => {
     this.setState({
@@ -52,7 +50,7 @@ class Login extends Component {
     // this.props.history.push('/dashboard')
 
     // this.props.loginn(data);
-   
+
     this.props.history.push("/dashboard");
   };
   render() {
@@ -107,4 +105,7 @@ function mapState(state) {
   return { state };
 }
 
-export default connect(mapStateToProps,dispatchToProps)(Login);
+export default connect(
+  mapStateToProps,
+  dispatchToProps
+)(Login);
