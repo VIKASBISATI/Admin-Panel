@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import userActions from "../actions/userActions";
-import { Table } from "react-bootstrap";
 import { connect } from "react-redux";
+import { Table } from "react-bootstrap";
 import Pagination from "react-js-pagination";
 import { Button } from "@material-ui/core";
 class QuestionAnswers extends Component {
@@ -25,10 +25,11 @@ class QuestionAnswers extends Component {
     this.setState({
       completeQuestionData: this.props.getCompleteQA
     });
-    console.log("will receiver props", this.state.completeQuestionData);
+    console.log("will receiver props", this.props.getCompleteQA);
+    this.pageSet()
   }
   pageSet = () => {
-    // console.log("complete data is ", completeData);
+    console.log("complete data is ", this.state.completeQuestionData);
     // console.log("active page", this.state.activePage);
     const lastIndex = this.state.activePage * this.state.itemsPerPage;
     const firstIndex = lastIndex - this.state.itemsPerPage;
@@ -36,6 +37,8 @@ class QuestionAnswers extends Component {
       firstIndex,
       lastIndex
     );
+    console.log("current items ",currentItems);
+    
     // console.log("last index", lastIndex);
     // console.log("first index", firstIndex);
     // console.log("current items", currentItems);
@@ -47,12 +50,12 @@ class QuestionAnswers extends Component {
 
     // console.log("curretn array is ", this.state.currentArray);
   };
-  handlePageChange = async pageNumber => {
-    await this.setState({
+  handlePageChange = pageNumber => {
+    this.setState({
       activePage: pageNumber
     });
     // console.log("Page number is", this.state.activePage);
-    const lastIndex = this.state.activePage * this.state.itemsPerPage;
+    const lastIndex = pageNumber * this.state.itemsPerPage;
     const firstIndex = lastIndex - this.state.itemsPerPage;
     const currentItems = this.state.completeQuestionData.slice(
       firstIndex,
@@ -61,7 +64,7 @@ class QuestionAnswers extends Component {
     // console.log("last index", lastIndex);
     // console.log("first index", firstIndex);
     // console.log("current index", currentItems);
-    await this.setState({
+    this.setState({
       currentArray: currentItems,
       sno: firstIndex + 1
     });
@@ -73,7 +76,6 @@ class QuestionAnswers extends Component {
     }
     return (
       <div>
-        
         <Table striped bordered hover responsive>
           <thead>
             <tr>
@@ -126,7 +128,4 @@ function mapState(state) {
   return { getCompleteQA };
 }
 
-export default connect(
-  mapState,
-  actionCreators
-)(QuestionAnswers);
+export default connect(mapState, actionCreators)(QuestionAnswers);

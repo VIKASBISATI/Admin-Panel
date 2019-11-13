@@ -6,6 +6,7 @@ import './App.css';
 import Dashboard from './components/dashboard';
 // import "bootstrap/less/bootstrap.less";
 import QuestionAnswers from './components/questionAnswers'
+import PaymentComponent from './components/paymentComponent'
 class App extends React.Component {
   render() {
     return (
@@ -14,6 +15,7 @@ class App extends React.Component {
             <Route path="/" exact component={Login} />
             <Route path="/dashboard" component={Dashboard}></Route>
             <Route path="/QAList" component={QuestionAnswers}></Route>
+            <Route path="/payments" component={PaymentComponent}></Route>
           </Switch>
         </Router>
     );

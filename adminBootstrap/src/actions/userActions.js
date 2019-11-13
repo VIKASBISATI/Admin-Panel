@@ -1,5 +1,9 @@
-import { adminLogin, getAllUnApprovedList } from '../services/adminServices';
-import { LOGIN_FAILURE, LOGIN_SUCCESS, LOGIN_REQUEST, GET_QA_DATA_FAILURE, GET_QA_DATA_SUCCESS } from '../constants/actionTypes'
+import { adminLogin, getAllUnApprovedList, getUsersCartList } from '../services/adminServices';
+import {
+    LOGIN_FAILURE, LOGIN_SUCCESS, LOGIN_REQUEST, GET_QA_DATA_FAILURE, GET_QA_DATA_SUCCESS,
+    GET_USER_CART_LIST_FAILURE, GET_USER_CART_LIST_SUCCESS
+
+} from '../constants/actionTypes'
 const userActions = {
     login(data) {
         console.log("dtaakhdkhakfhjkajfkue", data);
@@ -47,7 +51,26 @@ const userActions = {
         function failure(err) {
             return { type: GET_QA_DATA_FAILURE, payload: err }
         }
-    }
+    },
+    getPendingPaymentsData(data) {
+        return (dispatch) => {
+            getUsersCartList().then(res => {
+                console.log("res in get usercart list", res);
+                dispatch(success(res));
+            }).catch(err => {
+                console.log("error in get usercart list", err);
+                dispatch(failure(err));
+            })
+        }
+        function success(data) {
+            console.log("data in succdess",data);
+            
+            return { type:GET_USER_CART_LIST_SUCCESS, payload: data }
+        }
+        function failure(err) {
+            return { type: GET_USER_CART_LIST_FAILURE, payload: err }
+        }
+    },
 
 }
 export default userActions

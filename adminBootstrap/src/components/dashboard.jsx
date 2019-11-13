@@ -1,18 +1,28 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
 import { Navbar, Nav, Card, Table } from "react-bootstrap";
-import { getAdminUsersList, userService } from "../services/adminServices";
+import { userService } from "../services/adminServices";
 import Pagination from "react-js-pagination";
-import { GET_ADMIN_DATA } from "../constants/actionTypes";
 import { connect } from "react-redux";
-// const dispatchToProps=dispatch=>({
-//   getUsersList:resData=>dispatch({type:GET_ADMIN_DATA,payload:resData})
-// })
+import userActions from "../actions/userActions";
+import { getUsersCartList } from "../services/adminServices";
+import { GET_USER_CART_LIST_SUCCESS } from "../constants/actionTypes";
+// function mapStateToProps(state) {
+//   console.log("in map state to props", state);
+//   return {
+//     userList: state.dashboardReducers.user
+//   };
+// }
+// const actionCreators = {
+//   getPendingPayments: userActions.getPendingPaymentsData
+// };
+const dispatchToProps = dispatch => ({
+  getPendingPayments: resData =>
+    dispatch({ type: GET_USER_CART_LIST_SUCCESS, payload: resData })
+});
 function mapStateToProps(state) {
-  console.log("in map state to props", state);
-  return {
-    userList: state.dashboardReducers.user
-  };
+  // const getPaymentData=state.paymentReducers.cartData
+  const userList = state.dashboardReducers.user;
+  return { userList };
 }
 class Dashboard extends Component {
   constructor(props) {
@@ -30,23 +40,15 @@ class Dashboard extends Component {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this.getAdminUser(this.props.userList);
     this.pageSet();
-    await console.log("data in did mount ", this.props.userList);
   }
 
   getAdminUser = async usersData => {
-    // let resData=res.data.data.data;
-    // this.props.getUsersList(resData)
-    console.log("users data", usersData);
-
-    console.log("users list", this.props.userList);
-
     await this.setState({
       allUsers: usersData
     });
-    console.log("all users data", this.state.allUsers);
     const totalUsers = this.props.userList.length;
     const type = this.props.userList.filter(data => {
       return data.service === "advance";
@@ -63,21 +65,14 @@ class Dashboard extends Component {
   };
 
   pageSet = async completeData => {
-    // console.log("complete data is ", completeData);
-    // console.log("active page", this.state.activePage);
     const lastIndex = this.state.activePage * this.state.itemsPerPage;
     const firstIndex = lastIndex - this.state.itemsPerPage;
     const currentItems = this.state.allUsers.slice(firstIndex, lastIndex);
-    // console.log("last index", lastIndex);
-    // console.log("first index", firstIndex);
-    // console.log("current items", currentItems);
     await this.setState({
       currentArray: currentItems,
       last: lastIndex,
       sno: 1
     });
-
-    // console.log("curretn array is ", this.state.currentArray);
   };
   getService = (basic, advance) => {
     userService()
@@ -93,7 +88,6 @@ class Dashboard extends Component {
         const tempUserType = [];
         tempUserType.push(data1);
         tempUserType.push(data2);
-        // console.log("user types are ", this.state.userType);
         this.setState({
           userType: tempUserType,
           sno: 1
@@ -112,18 +106,11 @@ class Dashboard extends Component {
     const lastIndex = this.state.activePage * this.state.itemsPerPage;
     const firstIndex = lastIndex - this.state.itemsPerPage;
     const currentItems = this.state.allUsers.slice(firstIndex, lastIndex);
-    // console.log("last index", lastIndex);
-    // console.log("first index", firstIndex);
-    // console.log("current index", currentItems);
     this.setState({
       currentArray: currentItems,
       sno: firstIndex + 1
     });
   };
-
-  // handleUsersLink=()=>{
-  //   this.props.history.push("/dashboard")
-  // }
 
   handleLogout = () => {
     this.props.history.push("/");
@@ -133,8 +120,15 @@ class Dashboard extends Component {
     this.props.history.push("/QAList");
   };
 
+  handlePayment = () => {
+    getUsersCartList().then(resData => {
+      this.props.getPendingPayments(resData);
+      this.props.history.push("/payments");
+    });
+  };
+
   render() {
-    // console.log("this.state.sno", this.props.userList);
+    console.log("thjois.props", this.props);
     const userMap = this.state.userType.map((data, index) => {
       return (
         <Card
@@ -155,9 +149,8 @@ class Dashboard extends Component {
         <Navbar bg="light">
           <Navbar.Brand>ADMIN DASHBOARD</Navbar.Brand>
           <Nav>
-            {/* <Nav.Link onClick={this.handleUsersLink}>USERS</Nav.Link> */}
             <Nav.Link onClick={this.handleQA}>Q & A</Nav.Link>
-            <Nav.Link>PAYMENT</Nav.Link>
+            <Nav.Link onClick={this.handlePayment}>PAYMENT</Nav.Link>
             <Nav.Link onClick={this.handleLogout}>LOGOUT</Nav.Link>
           </Nav>
         </Navbar>
@@ -201,5 +194,5 @@ class Dashboard extends Component {
     );
   }
 }
-export default connect(mapStateToProps)(Dashboard);
-// export default withRouter(Dashboard);
+
+export default connect(mapStateToProps, dispatchToProps)(Dashboard);

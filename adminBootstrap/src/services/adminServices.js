@@ -31,3 +31,12 @@ export function getAllUnApprovedList() {
         return res.data.data;
     })
 }
+export function getUsersCartList() {
+    return axios.get(BASE_URL + '/productcarts/userCartList', {
+        headers: authHeader()
+    }).then(res => {
+        console.log("response in get user cart list", res.data.data);
+        return res.data.data;
+    })
+}
+

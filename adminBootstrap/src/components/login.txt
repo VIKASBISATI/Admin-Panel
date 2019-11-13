@@ -47,3 +47,87 @@
           </div>
         </div>
       </div>
+
+
+
+
+      import React, { Component } from "react";
+import { connect } from "react-redux";
+import paymentReducers from "../reducers/paymentReducers";
+import userActions from "../actions/userActions";
+import { Table } from "react-bootstrap";
+import Pagination from "react-js-pagination";
+import { Button } from "@material-ui/core";
+class PaymentComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state={
+        completePaymentData:[],
+    }
+  }
+  componentWillMount() {
+    this.props.getPendingPayments(true);
+    console.log(
+      "props after getting pending payments",
+      this.props.getPendingPaymentsList
+    );
+    this.setState({
+        completePaymentData:this.props.getPendingPaymentsList
+    })
+  }
+  render() {
+    return (
+        // <div>
+        //   <Table striped bordered hover responsive>
+        //     <thead>
+        //       <tr>
+        //         <th>FirstName</th>
+        //         <th>Action</th>
+        //       </tr>
+        //     </thead>
+        //     <tbody>
+        //       {this.state.completePaymentData.length > 0
+        //         ? this.state.currentArray.map((data, index) => {
+        //             return (
+        //               <tr key={index}>
+        //                 <td>{data.message}</td>
+        //                 <td>
+        //                   <div className="d-flex justify-content-between">
+        //                     <Button variant="contained" color="primary">
+        //                       Approve
+        //                     </Button>
+        //                     <Button variant="contained" color="primary">
+        //                       Reject
+        //                     </Button>
+        //                   </div>
+        //                 </td>
+        //               </tr>
+        //             );
+        //           })
+        //         : null}
+        //     </tbody>
+        //   </Table>
+        //   <div>
+        //     <Pagination
+        //       activePage={this.state.activePage}
+        //       itemsCountPerPage={this.state.itemsPerPage}
+        //       totalItemsCount={this.state.completeQuestionData.length}
+        //       pageRangeDisplayed={10}
+        //       onChange={this.handlePageChange}
+        //     />
+        //   </div>
+        // </div>.
+    <div></div>
+      );
+  }
+}
+const actionCreators = {
+  getPendingPayments: userActions.getPendingPaymentsData
+};
+function mapState(state) {
+  const getPendingPaymentsList = state.paymentReducers.cartData;
+  console.log("getPendingPayments", getPendingPaymentsList);
+  return { getPendingPaymentsList };
+}
+
+export default connect(mapState, actionCreators)(PaymentComponent);
