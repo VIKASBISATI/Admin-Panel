@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Table } from "react-bootstrap";
 import Pagination from "react-js-pagination";
 import { Button } from "@material-ui/core";
+import Dashboard from "./dashboard";
 class QuestionAnswers extends Component {
   constructor(props) {
     super(props);
@@ -26,7 +27,7 @@ class QuestionAnswers extends Component {
       completeQuestionData: this.props.getCompleteQA
     });
     console.log("will receiver props", this.props.getCompleteQA);
-    this.pageSet()
+    this.pageSet();
   }
   pageSet = () => {
     console.log("complete data is ", this.state.completeQuestionData);
@@ -37,8 +38,8 @@ class QuestionAnswers extends Component {
       firstIndex,
       lastIndex
     );
-    console.log("current items ",currentItems);
-    
+    console.log("current items ", currentItems);
+
     // console.log("last index", lastIndex);
     // console.log("first index", firstIndex);
     // console.log("current items", currentItems);
@@ -76,11 +77,13 @@ class QuestionAnswers extends Component {
     }
     return (
       <div>
-        <Table striped bordered hover responsive>
+        <Dashboard navProps={true} />
+        <Table variant="dark">
           <thead>
             <tr>
               <th>Question List</th>
-              <th>Action</th>
+              <th>Approval</th>
+              <th>Rejection</th>
             </tr>
           </thead>
           <tbody>
@@ -88,16 +91,20 @@ class QuestionAnswers extends Component {
               ? this.state.currentArray.map((data, index) => {
                   return (
                     <tr key={index}>
-                      <td>{data.message}</td>
                       <td>
-                        <div className="d-flex justify-content-between">
-                          <Button variant="contained" color="primary">
-                            Approve
-                          </Button>
-                          <Button variant="contained" color="primary">
-                            Reject
-                          </Button>
-                        </div>
+                        <div
+                          dangerouslySetInnerHTML={{ __html: data.message }}
+                        ></div>
+                      </td>
+                      <td>
+                        <Button variant="contained" color="primary">
+                          Approve
+                        </Button>
+                      </td>
+                      <td>
+                        <Button variant="contained" color="primary">
+                          Reject
+                        </Button>
                       </td>
                     </tr>
                   );
@@ -127,5 +134,4 @@ function mapState(state) {
   console.log("completed qa", getCompleteQA);
   return { getCompleteQA };
 }
-
 export default connect(mapState, actionCreators)(QuestionAnswers);

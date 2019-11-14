@@ -6,6 +6,8 @@ import { connect } from "react-redux";
 import userActions from "../actions/userActions";
 import { getUsersCartList } from "../services/adminServices";
 import { GET_USER_CART_LIST_SUCCESS } from "../constants/actionTypes";
+import { Link } from "react-router-dom";
+// import { browserHistory } from "react-router";
 // function mapStateToProps(state) {
 //   console.log("in map state to props", state);
 //   return {
@@ -36,6 +38,7 @@ class Dashboard extends Component {
       itemsPerPage: 5,
       currentArray: [],
       last: 0,
+      activeNav: true,
       sno: 0
     };
   }
@@ -123,12 +126,12 @@ class Dashboard extends Component {
   handlePayment = () => {
     getUsersCartList().then(resData => {
       this.props.getPendingPayments(resData);
-      this.props.history.push("/payments");
+      this.props.history.push("/payments")
     });
   };
 
   render() {
-    console.log("thjois.props", this.props);
+    // console.log("thjois.props", this.props);
     const userMap = this.state.userType.map((data, index) => {
       return (
         <Card
@@ -146,53 +149,82 @@ class Dashboard extends Component {
 
     return (
       <div className="dashboard-container">
-        <Navbar bg="light">
-          <Navbar.Brand>ADMIN DASHBOARD</Navbar.Brand>
-          <Nav>
-            <Nav.Link onClick={this.handleQA}>Q & A</Nav.Link>
-            <Nav.Link onClick={this.handlePayment}>PAYMENT</Nav.Link>
-            <Nav.Link onClick={this.handleLogout}>LOGOUT</Nav.Link>
-          </Nav>
-        </Navbar>
-        <div className="d-flex align-items-center justify-content-center">
-          {userMap}
-        </div>
-        <Table variant="dark" responsive>
-          <thead>
-            <tr>
-              <th>S.NO</th>
-              <th>FirstName</th>
-              <th>LastName</th>
-              <th>Email</th>
-              <th>Service</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.currentArray.map((data, index) => {
-              return (
-                <tr key={index}>
-                  <td>{this.state.sno++}</td>
-                  <td>{data.firstName}</td>
-                  <td>{data.lastName}</td>
-                  <td>{data.email}</td>
-                  <td>{data.service}</td>
+        {!this.props.navProps ? (
+          <div>
+            <Navbar bg="light">
+              <Navbar.Brand style={{ cursor: "pointer" }}>
+                <Link to="/dashboard">ADMIN DASHBOARD</Link>
+              </Navbar.Brand>
+              <Nav>
+                <Nav.Link>
+                  <Link to="/QAList">Q & A</Link>
+                </Nav.Link>
+                <Nav.Link onClick={this.handlePayment}>
+                  {" "}
+                  <Link to="/dashboard">PAYMENT</Link>
+                </Nav.Link>
+                <Nav.Link>
+                  <Link to="/">LOGOUT</Link>
+                </Nav.Link>
+              </Nav>
+            </Navbar>
+            <div className="d-flex align-items-center justify-content-center">
+              {userMap}
+            </div>
+            <Table variant="dark" responsive>
+              <thead>
+                <tr>
+                  <th>S.NO</th>
+                  <th>FirstName</th>
+                  <th>LastName</th>
+                  <th>Email</th>
+                  <th>Service</th>
                 </tr>
-              );
-            })}
-          </tbody>
-        </Table>
-        <div>
-          <Pagination
-            activePage={this.state.activePage}
-            itemsCountPerPage={this.state.itemsPerPage}
-            totalItemsCount={this.state.allUsers.length}
-            pageRangeDisplayed={10}
-            onChange={this.handlePageChange}
-          />
-        </div>
+              </thead>
+              <tbody>
+                {this.state.currentArray.map((data, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{this.state.sno++}</td>
+                      <td>{data.firstName}</td>
+                      <td>{data.lastName}</td>
+                      <td>{data.email}</td>
+                      <td>{data.service}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+            <div>
+              <Pagination
+                activePage={this.state.activePage}
+                itemsCountPerPage={this.state.itemsPerPage}
+                totalItemsCount={this.state.allUsers.length}
+                pageRangeDisplayed={10}
+                onChange={this.handlePageChange}
+              />
+            </div>
+          </div>
+        ) : (
+          <div>
+            <Navbar bg="light">
+              <Navbar.Brand style={{ cursor: "pointer" }}>
+                <Link to="/dashboard">ADMIN DASHBOARD</Link>
+              </Navbar.Brand>
+              <Nav>
+                <Nav.Link>
+                  <Link to="/QAList">Q & A</Link>
+                </Nav.Link>
+                <Nav.Link onClick={this.handlePayment}>PAYMENT</Nav.Link>
+                <Nav.Link>
+                  <Link to="/">LOGOUT</Link>
+                </Nav.Link>
+              </Nav>
+            </Navbar>
+          </div>
+        )}
       </div>
     );
   }
 }
-
 export default connect(mapStateToProps, dispatchToProps)(Dashboard);

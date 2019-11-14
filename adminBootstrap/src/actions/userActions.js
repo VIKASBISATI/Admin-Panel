@@ -1,7 +1,9 @@
-import { adminLogin, getAllUnApprovedList, getUsersCartList } from '../services/adminServices';
+import { adminLogin, getAllUnApprovedList, getUsersCartList, completeUserOrder,rejectUserOrder } from '../services/adminServices';
 import {
     LOGIN_FAILURE, LOGIN_SUCCESS, LOGIN_REQUEST, GET_QA_DATA_FAILURE, GET_QA_DATA_SUCCESS,
-    GET_USER_CART_LIST_FAILURE, GET_USER_CART_LIST_SUCCESS
+    GET_USER_CART_LIST_FAILURE, GET_USER_CART_LIST_SUCCESS, ADMIN_COMPLETE_ORDER_FAILURE, ADMIN_COMPLETE_ORDER_REQUEST
+    , ADMIN_COMPLETE_ORDER_SUCCESS,
+    ADMIN_CANCEL_ORDER_FAILURE,ADMIN_CANCEL_ORDER_REQUEST,ADMIN_CANCEL_ORDER_SUCCESS
 
 } from '../constants/actionTypes'
 const userActions = {
@@ -63,14 +65,52 @@ const userActions = {
             })
         }
         function success(data) {
-            console.log("data in succdess",data);
-            
-            return { type:GET_USER_CART_LIST_SUCCESS, payload: data }
+            console.log("data in succdess", data);
+
+            return { type: GET_USER_CART_LIST_SUCCESS, payload: data }
         }
         function failure(err) {
             return { type: GET_USER_CART_LIST_FAILURE, payload: err }
         }
     },
+    completeOrder(data) {
+        return (dispatch) => {
+            dispatch(request(data));
+            completeUserOrder(data).then(res => {
+                dispatch(success(data));
+            }).catch(err => {
+                dispatch(failure(err));
+            })
+        }
+        function request(data) {
+            return { type: ADMIN_COMPLETE_ORDER_REQUEST, payload: data }
+        }
+        function success(data) {
+            return { type: ADMIN_COMPLETE_ORDER_SUCCESS, payload: data }
+        }
+        function failure(err) {
+            return { type: ADMIN_COMPLETE_ORDER_FAILURE, payload: err }
+        }
+    },
+    cancelOrder(data) {
+        return (dispatch) => {
+            dispatch(request(data));
+            rejectUserOrder(data).then(res => {
+                dispatch(success(data));
+            }).catch(err => {
+                dispatch(failure(err));
+            })
+        }
+        function request(data) {
+            return { type: ADMIN_CANCEL_ORDER_REQUEST, payload: data }
+        }
+        function success(data) {
+            return { type: ADMIN_CANCEL_ORDER_SUCCESS, payload: data }
+        }
+        function failure(err) {
+            return { type: ADMIN_COMPLETE_ORDER_FAILURE, payload: err }
+        }
+    }
 
 }
 export default userActions

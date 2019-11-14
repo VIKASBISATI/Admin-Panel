@@ -40,3 +40,19 @@ export function getUsersCartList() {
     })
 }
 
+export function completeUserOrder(data) {
+    return axios.post(BASE_URL + '/productcarts/adminCompleteOrder',data, {
+        headers: authHeader()
+    }).then(res => {
+        console.log("response in admin complete orde", res);
+        return res;
+    })
+}
+export function rejectUserOrder(data) {
+    return axios.post(BASE_URL + '/productcarts/adminCancelOrder',data, {
+        headers: authHeader()
+    }).then(res => {
+        console.log("response in admin complete orde", res);
+        return res;
+    })
+}
