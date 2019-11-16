@@ -71,6 +71,20 @@ class QuestionAnswers extends Component {
     });
   };
 
+  handleApprove = id => {
+    let data = {
+      id: id
+    };
+    this.props.questionApproveDetails(data);
+  };
+
+  handleReject = id => {
+    let data = {
+      id: id
+    };
+    this.props.questionRejectDetails(data);
+  };
+
   render() {
     if (this.state.completeQuestionData.length > 0) {
       console.log("data in render", this.state.completeQuestionData);
@@ -97,12 +111,20 @@ class QuestionAnswers extends Component {
                         ></div>
                       </td>
                       <td>
-                        <Button variant="contained" color="primary">
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => this.handleApprove(data.parentId)}
+                        >
                           Approve
                         </Button>
                       </td>
                       <td>
-                        <Button variant="contained" color="primary">
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => this.handleReject(data.parentId)}
+                        >
                           Reject
                         </Button>
                       </td>
@@ -126,7 +148,9 @@ class QuestionAnswers extends Component {
   }
 }
 const actionCreators = {
-  getUnApprovedList: userActions.getUnApprovedData
+  getUnApprovedList: userActions.getUnApprovedData,
+  questionApproveDetails: userActions.approveQuestion,
+  questionRejectDetails: userActions.rejectQuestion
 };
 function mapState(state) {
   console.log("state", state);

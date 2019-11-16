@@ -56,3 +56,24 @@ export function rejectUserOrder(data) {
         return res;
     })
 }
+
+export function approveQA(data) {
+    let id=data.id;
+    return axios.post(BASE_URL + `/questionAndAnswerNotes/approve/${id}`,data, {
+        headers: authHeader()
+    }).then(res => {
+        console.log("response in admin complete orde", res);
+        return res;
+    })
+}
+
+
+export function rejectQA(data) {
+    let id=data.id;
+    return axios.post(BASE_URL + `/questionAndAnswerNotes/approve/${id}`,data, {
+        headers: authHeader()
+    }).then(res => {
+        console.log("response in admin complete orde", res);
+        return res;
+    })
+}

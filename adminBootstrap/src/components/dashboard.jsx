@@ -126,7 +126,7 @@ class Dashboard extends Component {
   handlePayment = () => {
     getUsersCartList().then(resData => {
       this.props.getPendingPayments(resData);
-      this.props.history.push("/payments")
+      this.props.history.push("/payments");
     });
   };
 

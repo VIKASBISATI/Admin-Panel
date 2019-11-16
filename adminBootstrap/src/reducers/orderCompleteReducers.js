@@ -17,7 +17,7 @@ export default (state = { orderCompleted: false, isRequested: false, cartData: [
             orderCompleted: false,
             cartData: action.payload
         }
-        default: return {
+        default: return { 
             state
         }
     }

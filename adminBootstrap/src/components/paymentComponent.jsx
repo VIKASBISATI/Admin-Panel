@@ -7,7 +7,7 @@ import { Button } from "@material-ui/core";
 import userActions from "../actions/userActions";
 function mapStateToProps(state) {
   const getPaymentData = state.paymentReducers.cartData;
-  const getCompleteOrderStatus=state.orderCompleteReducers;
+  const getCompleteOrderStatus = state.orderCompleteReducers;
   return { getPaymentData };
 }
 class PaymentComponent extends Component {
@@ -86,19 +86,19 @@ class PaymentComponent extends Component {
     let data = {
       cartId: id
     };
-    console.log("id is ",this.props);
-    
+    console.log("id is ", this.props);
+
     this.props.completeOrderDetails(data);
   };
 
-  handleCancelOrder=id=>{
-    let data={
-      cartId:id
-    }
-    console.log("id in cancel order",data);
-    
+  handleCancelOrder = id => {
+    let data = {
+      cartId: id
+    };
+    console.log("id in cancel order", data);
+
     this.props.cancelOrderDetails(data);
-  }
+  };
 
   render() {
     console.log("payment render", this.props.getPaymentData);
@@ -132,7 +132,11 @@ class PaymentComponent extends Component {
                     </Button>
                   </td>
                   <td>
-                    <Button variant="contained" color="primary" onClick={()=>this.handleCancelOrder(data.id)}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => this.handleCancelOrder(data.id)}
+                    >
                       Reject
                     </Button>
                   </td>
@@ -156,6 +160,6 @@ class PaymentComponent extends Component {
 }
 const actionCreators = {
   completeOrderDetails: userActions.completeOrder,
-  cancelOrderDetails:userActions.cancelOrder
+  cancelOrderDetails: userActions.cancelOrder
 };
-export default connect(mapStateToProps,actionCreators)(PaymentComponent);
+export default connect(mapStateToProps, actionCreators)(PaymentComponent);

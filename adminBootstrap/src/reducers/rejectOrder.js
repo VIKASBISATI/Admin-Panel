@@ -12,7 +12,7 @@ export default (state = { orderCancelled: false, isRequested: false, cartData: [
             orderCancelled: true,
             cartData: action.payload
         }
-        case ADMIN_COMPLETE_ORDER_FAILURE: return {
+        case ADMIN_CANCEL_ORDER_FAILURE: return {
             ...state,
             orderCancelled: false,
             cartData: action.payload

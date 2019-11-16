@@ -1,9 +1,11 @@
-import { adminLogin, getAllUnApprovedList, getUsersCartList, completeUserOrder,rejectUserOrder } from '../services/adminServices';
+import { adminLogin, getAllUnApprovedList, getUsersCartList, completeUserOrder, rejectUserOrder, approveQA, rejectQA } from '../services/adminServices';
 import {
     LOGIN_FAILURE, LOGIN_SUCCESS, LOGIN_REQUEST, GET_QA_DATA_FAILURE, GET_QA_DATA_SUCCESS,
-    GET_USER_CART_LIST_FAILURE, GET_USER_CART_LIST_SUCCESS, ADMIN_COMPLETE_ORDER_FAILURE, ADMIN_COMPLETE_ORDER_REQUEST
-    , ADMIN_COMPLETE_ORDER_SUCCESS,
-    ADMIN_CANCEL_ORDER_FAILURE,ADMIN_CANCEL_ORDER_REQUEST,ADMIN_CANCEL_ORDER_SUCCESS
+    GET_USER_CART_LIST_FAILURE, GET_USER_CART_LIST_SUCCESS, ADMIN_COMPLETE_ORDER_FAILURE,
+    ADMIN_COMPLETE_ORDER_REQUEST, ADMIN_COMPLETE_ORDER_SUCCESS,
+    ADMIN_CANCEL_ORDER_REQUEST, ADMIN_CANCEL_ORDER_SUCCESS,
+    ADMIN_QUESTION_APPROVAL_FAILURE, ADMIN_QUESTION_APPROVAL_REQUEST, ADMIN_QUESTION_APPROVAL_SUCCESS,
+    ADMIN_QUESTION_REJECTION_FAILURE, ADMIN_QUESTION_REJECTION_REQUEST, ADMIN_QUESTION_REJECTION_SUCCESS
 
 } from '../constants/actionTypes'
 const userActions = {
@@ -77,7 +79,7 @@ const userActions = {
         return (dispatch) => {
             dispatch(request(data));
             completeUserOrder(data).then(res => {
-                dispatch(success(data));
+                dispatch(success(res));
             }).catch(err => {
                 dispatch(failure(err));
             })
@@ -96,7 +98,7 @@ const userActions = {
         return (dispatch) => {
             dispatch(request(data));
             rejectUserOrder(data).then(res => {
-                dispatch(success(data));
+                dispatch(success(res));
             }).catch(err => {
                 dispatch(failure(err));
             })
@@ -110,7 +112,44 @@ const userActions = {
         function failure(err) {
             return { type: ADMIN_COMPLETE_ORDER_FAILURE, payload: err }
         }
+    },
+    approveQuestion(data) {
+        return (dispatch) => {
+            dispatch(request(data));
+            approveQA(data).then(res => {
+                dispatch(success(res))
+            }).catch(err => {
+                dispatch(failure(err))
+            })
+        }
+        function request(data) {
+            return { type: ADMIN_QUESTION_APPROVAL_REQUEST, payload: data }
+        }
+        function success(data) {
+            return { type: ADMIN_QUESTION_APPROVAL_SUCCESS, payload: data }
+        }
+        function failure(err) {
+            return { type: ADMIN_QUESTION_APPROVAL_FAILURE, payload: err }
+        }
+    },
+    rejectQuestion(data) {
+        return (dispatch) => {
+            dispatch(request(data));
+            rejectQA(data).then(res => {
+                dispatch(success(res))
+            }).catch(err => {
+                dispatch(failure(err))
+            })
+        }
+        function request(data) {
+            return { type: ADMIN_QUESTION_REJECTION_REQUEST, payload: data }
+        }
+        function success(res) {
+            return { type: ADMIN_QUESTION_REJECTION_SUCCESS, payload: res }
+        }
+        function failure(err) {
+            return { type: ADMIN_QUESTION_REJECTION_FAILURE, payload: err }
+        }
     }
-
 }
 export default userActions

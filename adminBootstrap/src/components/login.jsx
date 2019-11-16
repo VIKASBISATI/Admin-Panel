@@ -19,7 +19,7 @@ class Login extends Component {
     super(props);
     this.state = {
       email: "",
-      password: "",
+      password: ""
     };
   }
   componentDidMount() {
@@ -106,7 +106,4 @@ function mapState(state) {
   return { state };
 }
 
-export default connect(
-  mapStateToProps,
-  dispatchToProps
-)(Login);
+export default connect(mapStateToProps, dispatchToProps)(Login);
