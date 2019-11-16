@@ -3,23 +3,14 @@ import { Navbar, Nav, Card, Table } from "react-bootstrap";
 import { userService } from "../services/adminServices";
 import Pagination from "react-js-pagination";
 import { connect } from "react-redux";
-import userActions from "../actions/userActions";
 import { getUsersCartList } from "../services/adminServices";
 import { GET_USER_CART_LIST_SUCCESS } from "../constants/actionTypes";
 import { Link } from "react-router-dom";
-// import { browserHistory } from "react-router";
-// function mapStateToProps(state) {
-//   console.log("in map state to props", state);
-//   return {
-//     userList: state.dashboardReducers.user
-//   };
-// }
-// const actionCreators = {
-//   getPendingPayments: userActions.getPendingPaymentsData
-// };
 const dispatchToProps = dispatch => ({
-  getPendingPayments: resData =>
-    dispatch({ type: GET_USER_CART_LIST_SUCCESS, payload: resData })
+  getPendingPayments: resData => {
+    console.log("dispatch to props");
+    dispatch({ type: GET_USER_CART_LIST_SUCCESS, payload: resData });
+  }
 });
 function mapStateToProps(state) {
   // const getPaymentData=state.paymentReducers.cartData

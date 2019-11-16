@@ -5,6 +5,7 @@ import { Table } from "react-bootstrap";
 import Dashboard from "./dashboard";
 import { Button } from "@material-ui/core";
 import userActions from "../actions/userActions";
+import {getUsersCartList} from '../services/adminServices'
 function mapStateToProps(state) {
   const getPaymentData = state.paymentReducers.cartData;
   const getCompleteOrderStatus = state.orderCompleteReducers;
@@ -68,7 +69,7 @@ class PaymentComponent extends Component {
     console.log("current array in page set", this.state.currentArray);
   };
   handlePageChange = pageNumber => {
-    this.setState({
+    this.setState({ 
       activePage: pageNumber
     });
     console.log("activepage", pageNumber);
@@ -82,12 +83,24 @@ class PaymentComponent extends Component {
     console.log("sno ater back", this.state.currentArray);
   };
 
+  getPayments=()=>{
+    getUsersCartList().then(res=>{
+      console.log("res.data in get payments",res);
+      this.setState({
+        paymentData:res
+      })
+      this.handlePageChange(this.state.activePage)
+    }).catch(err=>{
+      console.log("err in getting user cart data",err);
+    })
+  }
+
   handleApprove = id => {
     let data = {
       cartId: id
     };
     console.log("id is ", this.props);
-
+    this.getPayments();
     this.props.completeOrderDetails(data);
   };
 
@@ -96,12 +109,12 @@ class PaymentComponent extends Component {
       cartId: id
     };
     console.log("id in cancel order", data);
-
+    this.getPayments()
     this.props.cancelOrderDetails(data);
   };
 
   render() {
-    console.log("payment render", this.props.getPaymentData);
+    console.log("payment render", this.state.currentArray);
     return (
       <div>
         <Dashboard navProps={true} />
@@ -118,10 +131,10 @@ class PaymentComponent extends Component {
           <tbody>
             {this.state.currentArray.map((data, index) => {
               return data.status === "pending" ? (
-                <tr key={index}>
-                  <td>{data.user.firstName}</td>
+                <tr key={index}>  
+                  {/* <td>{data.user.firstName}</td>
                   <td>{data.user.lastName}</td>
-                  <td>{data.user.service}</td>
+                  <td>{data.user.service}</td> */}
                   <td>
                     <Button
                       variant="contained"

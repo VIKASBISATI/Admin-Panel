@@ -4,6 +4,9 @@ import userActions from "../actions/userActions";
 import { MDBIcon, MDBBtn, MDBCardHeader, MDBInput } from "mdbreact";
 import { Card } from "@material-ui/core";
 import { getAdminUsersList } from "../services/adminServices";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 import { GET_ADMIN_DATA } from "../constants/actionTypes";
 const dispatchToProps = dispatch => ({
   getUsersList: resData => dispatch({ type: GET_ADMIN_DATA, payload: resData })
@@ -19,7 +22,9 @@ class Login extends Component {
     super(props);
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      snackbarOpen: false,
+      msgSnackbar: ""
     };
   }
   componentDidMount() {
@@ -43,17 +48,35 @@ class Login extends Component {
   };
 
   handleSubmit = () => {
-    let data = {
-      email: this.state.email,
-      password: this.state.password
-    };
-    console.log("data before sending to action ", data);
-    // this.props.history.push('/dashboard')
+    if (this.state.email === "") {
+      this.setState({
+        snackbarOpen: !this.state.snackbarOpen,
+        msgSnackbar: "Email can't be empty"
+      });
+    } else if (this.state.password === "") {
+      this.setState({
+        snackbarOpen: !this.state.snackbarOpen,
+        msgSnackbar: "password can't be empty"
+      });
+    } else {
+      let data = {
+        email: this.state.email,
+        password: this.state.password
+      };
+      console.log("data before sending to action ", data);
+      // this.props.history.push('/dashboard')
 
-    // this.props.loginn(data);
+      // this.props.loginn(data);
 
-    this.props.history.push("/dashboard");
+      this.props.history.push("/dashboard");
+    }
   };
+  handleClose=()=>{
+    this.setState({
+      snackbarOpen:!this.state.snackbarOpen,
+
+    })
+  }
   render() {
     return (
       <div
@@ -95,6 +118,26 @@ class Login extends Component {
             </div>
           </div>
         </Card>
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center"
+          }}
+          open={this.state.snackbarOpen}
+          autoHideDuration={6000}
+          onClose={this.handleClose}
+          message={<span id="message-id">{this.state.msgSnackbar}</span>}
+          action={[
+            <IconButton
+              key="close"
+              aria-label="close"
+              color="inherit"
+              onClick={this.handleClose}
+            >
+              <CloseIcon />
+            </IconButton>
+          ]}
+        />
       </div>
     );
   }
